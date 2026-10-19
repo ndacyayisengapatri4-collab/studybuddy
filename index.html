@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyBuddy — Student Productivity & Learning Suite</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-graduation-cap logo-icon"></i>
+        <h2>StudyBuddy</h2>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+        <button class="nav-item" data-tab="assignments"><i class="fa-solid fa-list-check"></i> Assignments & Exams</button>
+        <button class="nav-item" data-tab="schedule"><i class="fa-solid fa-calendar-days"></i> Timetable & To-Do</button>
+        <button class="nav-item" data-tab="grades"><i class="fa-solid fa-calculator"></i> Grade Calculator</button>
+        <button class="nav-item" data-tab="flashcards"><i class="fa-solid fa-brain"></i> Notes & Flashcards</button>
+        <button class="nav-item pro-nav-item" data-tab="pro-features"><i class="fa-solid fa-crown"></i> StudyBuddy Pro <span class="badge">VIP</span></button>
+      </nav>
+
+      <div class="user-tier-card">
+        <div class="tier-info">
+          <span class="tier-label">Current Plan:</span>
+          <strong id="currentPlanName">Free Student</strong>
+        </div>
+        <button class="btn btn-upgrade" id="sidebarUpgradeBtn">
+          <i class="fa-solid fa-bolt"></i> Upgrade Plan
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-header">
+        <div class="greeting">
+          <h1 id="welcomeGreeting">Welcome back, Student! 👋</h1>
+          <p>Organize your schoolwork, master exams, and hit your target grades.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" id="resetDataBtn"><i class="fa-solid fa-rotate-left"></i> Reset Demo Data</button>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD -->
+      <section id="dashboard" class="tab-content active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon yellow"><i class="fa-solid fa-clock"></i></div>
+            <div class="stat-info"><h3 id="statPendingAssignments">0</h3><p>Pending Assignments</p></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red"><i class="fa-solid fa-fire"></i></div>
+            <div class="stat-info"><h3 id="statUpcomingExams">0</h3><p>Upcoming Exams</p></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><i class="fa-solid fa-check-double"></i></div>
+            <div class="stat-info"><h3 id="statCompletedTasks">0/0</h3><p>Today's To-Dos Done</p></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue"><i class="fa-solid fa-award"></i></div>
+            <div class="stat-info"><h3 id="statAverageGpa">0.0</h3><p>Estimated GPA</p></div>
+          </div>
+        </div>
+
+        <div class="dashboard-widgets">
+          <div class="widget-card pomodoro-card">
+            <div class="widget-header"><h3><i class="fa-solid fa-stopwatch"></i> Focus Pomodoro Timer</h3></div>
+            <div class="timer-modes">
+              <button class="timer-btn active" data-time="1500">Focus (25m)</button>
+              <button class="timer-btn" data-time="300">Short Break (5m)</button>
+              <button class="timer-btn" data-time="900">Long Break (15m)</button>
+            </div>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="timer-controls">
+              <button class="btn btn-primary" id="startTimerBtn"><i class="fa-solid fa-play"></i> Start</button>
+              <button class="btn btn-secondary" id="pauseTimerBtn"><i class="fa-solid fa-pause"></i> Pause</button>
+              <button class="btn btn-outline" id="resetTimerBtn"><i class="fa-solid fa-arrow-rotate-right"></i> Reset</button>
+            </div>
+          </div>
+
+          <div class="widget-card">
+            <div class="widget-header"><h3><i class="fa-solid fa-triangle-exclamation"></i> Next Up Deadlines</h3></div>
+            <ul class="deadline-list" id="urgentDeadlineList"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: ASSIGNMENTS -->
+      <section id="assignments" class="tab-content">
+        <div class="section-header">
+          <h2>Assignment & Exam Tracker</h2>
+          <button class="btn btn-primary" id="openAddAssignmentModal"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr><th>Title</th><th>Type</th><th>Subject</th><th>Due Date</th><th>Priority</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody id="assignmentsTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 3: TIMETABLE & TODOS -->
+      <section id="schedule" class="tab-content">
+        <div class="grid-2col">
+          <div class="widget-card">
+            <div class="widget-header"><h3><i class="fa-solid fa-square-check"></i> Daily To-Do Checklist</h3></div>
+            <form id="todoForm" class="inline-form">
+              <input type="text" id="todoInput" placeholder="Add a new task for today..." required />
+              <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i></button>
+            </form>
+            <ul class="todo-list" id="todoList"></ul>
+          </div>
+          <div class="widget-card">
+            <div class="widget-header"><h3><i class="fa-solid fa-calendar-week"></i> Weekly Study Schedule</h3></div>
+            <p class="text-muted">Tip: Add your class routine or private study blocks here.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: GRADES -->
+      <section id="grades" class="tab-content">
+        <div class="grid-2col">
+          <div class="widget-card">
+            <div class="widget-header"><h3><i class="fa-solid fa-calculator"></i> Grade Overview</h3></div>
+            <div class="grades-summary">
+              <div class="summary-metric"><span>Estimated GPA (4.0 Scale):</span><strong id="convertedGpa">0.0</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: FLASHCARDS -->
+      <section id="flashcards" class="tab-content">
+        <div class="section-header">
+          <h2>Revision Flashcards</h2>
+          <button class="btn btn-primary" id="openAddCardModal"><i class="fa-solid fa-plus"></i> New Flashcard</button>
+        </div>
+        <div class="flashcards-wrapper">
+          <div class="flashcard-container">
+            <div class="flashcard" id="activeCard">
+              <div class="card-face card-front">
+                <span class="card-subject" id="cardSubjectTag">Subject</span>
+                <p id="cardFrontText">Flip card to check answers.</p>
+                <span class="flip-hint"><i class="fa-solid fa-rotate"></i> Click to flip</span>
+              </div>
+              <div class="card-face card-back">
+                <p id="cardBackText">Answer goes here.</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-controls">
+            <button class="btn btn-outline" id="prevCardBtn"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+            <span class="card-counter" id="cardCounterDisplay">Card 0 of 0</span>
+            <button class="btn btn-outline" id="nextCardBtn">Next <i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: PREMIUM PRICING TIERS -->
+      <section id="pro-features" class="tab-content">
+        <div class="pricing-header">
+          <span class="gold-badge"><i class="fa-solid fa-crown"></i> StudyBuddy Premium</span>
+          <h2>Invest in Your Academic Future</h2>
+          <p>Choose your plan from $5 to $50/month and unlock advanced AI features.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="card-badge">Starter Pass</div>
+            <div class="price-header"><span class="currency">$</span><span class="amount">5</span><span class="period">/ mo</span></div>
+            <h4>Scholar Pass</h4>
+            <ul class="feature-list">
+              <li><i class="fa-solid fa-check text-green"></i> Unlimited Tasks & Notes</li>
+              <li><i class="fa-solid fa-check text-green"></i> Custom Focus Sounds</li>
+            </ul>
+            <button class="btn btn-outline select-plan-btn" data-plan="Scholar Pass ($5)" data-price="5">Select $5/mo</button>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="card-badge popular">Most Popular</div>
+            <div class="price-header"><span class="currency">$</span><span class="amount">15</span><span class="period">/ mo</span></div>
+            <h4>Honor Roll Pro</h4>
+            <ul class="feature-list">
+              <li><i class="fa-solid fa-check text-green"></i> Everything in Scholar</li>
+              <li><i class="fa-solid fa-check text-green"></i> <strong>AI Flashcard Generator</strong></li>
+            </ul>
+            <button class="btn btn-primary select-plan-btn" data-plan="Honor Roll Pro ($15)" data-price="15">Select $15/mo</button>
+          </div>
+
+          <div class="pricing-card gold-card">
+            <div class="card-badge vip">Ultimate VIP</div>
+            <div class="price-header"><span class="currency">$</span><span class="amount">50</span><span class="period">/ mo</span></div>
+            <h4>Dean's List Genius</h4>
+            <ul class="feature-list">
+              <li><i class="fa-solid fa-check text-green"></i> Everything in Honor Roll</li>
+              <li><i class="fa-solid fa-check text-green"></i> <strong>24/7 Personal AI Tutor</strong></li>
+            </ul>
+            <button class="btn btn-gold select-plan-btn" data-plan="Dean's List Genius ($50)" data-price="50">Select $50/mo</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- CHECKOUT PAYMENT MODAL -->
+  <div class="modal" id="checkoutModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-lock"></i> Secure Checkout</h3>
+        <button class="close-modal" id="closeCheckoutModal">&times;</button>
+      </div>
+      <div class="checkout-body">
+        <p>You are upgrading to: <strong id="modalPlanTitle">Scholar Pass ($5)</strong></p>
+        <div class="payment-methods-box">
+          <label class="pay-option">
+            <input type="radio" name="paymentMethod" checked />
+            <i class="fa-brands fa-google-pay" style="font-size:24px; color:#4285F4;"></i> Google Pay / Credit Card
+          </label>
+          <label class="pay-option">
+            <input type="radio" name="paymentMethod" />
+            <i class="fa-brands fa-paypal" style="font-size:20px; color:#003087;"></i> PayPal Account
+          </label>
+        </div>
+        <button class="btn btn-gold full-width" id="confirmPaymentBtn">Pay Now & Unlock Pro</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Assignment -->
+  <div class="modal" id="addAssignmentModal">
+    <div class="modal-content">
+      <div class="modal-header"><h3>Add Item</h3><button class="close-modal" id="closeAssignModal">&times;</button></div>
+      <form id="assignmentForm">
+        <div class="form-group"><label>Title</label><input type="text" id="assignTitle" required /></div>
+        <div class="form-row">
+          <div class="form-group"><label>Type</label><select id="assignType"><option>Assignment</option><option>Exam</option></select></div>
+          <div class="form-group"><label>Subject</label><input type="text" id="assignSubject" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Due Date</label><input type="date" id="assignDate" required /></div>
+          <div class="form-group"><label>Priority</label><select id="assignPriority"><option>High</option><option>Medium</option><option>Low</option></select></div>
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Save Task</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Flashcard -->
+  <div class="modal" id="addCardModal">
+    <div class="modal-content">
+      <div class="modal-header"><h3>New Flashcard</h3><button class="close-modal" id="closeCardModal">&times;</button></div>
+      <form id="flashcardForm">
+        <div class="form-group"><label>Subject</label><input type="text" id="cardSubject" required /></div>
+        <div class="form-group"><label>Question</label><textarea id="cardFront" required></textarea></div>
+        <div class="form-group"><label>Answer</label><textarea id="cardBack" required></textarea></div>
+        <button type="submit" class="btn btn-primary full-width">Save Flashcard</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
